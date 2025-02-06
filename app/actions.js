@@ -15,13 +15,19 @@ const cleanTask = (task) => ({
 export async function createTask(data) {
   try {
     await connectToDatabase();
-    const newTask = await Task.create({ title: data.title, completed: false });
-    return cleanTask(newTask.toObject());
+    const newTask = await Task.create({
+      title: data.title,
+      description: data.description,
+      dueDate: new Date(data.dueDate),
+      completed: false,
+    });
+    return JSON.parse(JSON.stringify(newTask));
   } catch (error) {
     console.error("Error creating task:", error);
     return { error: "Failed to create task" };
   }
 }
+
 
 // Get All Tasks
 export async function getTasks() {
